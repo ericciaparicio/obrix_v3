@@ -58,19 +58,19 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 > Escribir estos tests primero y confirmar que FALLAN antes de implementar.
 
-- [ ] T011 [P] [US1] Test de integración: `POST /api/auth/register` — éxito (201), email duplicado (409), campos inválidos (400) en `tests/integration/auth-register.test.ts` (`contracts/auth.md`, AC-22, AC-23, AC-24)
-- [ ] T012 [P] [US1] Test de integración: login con credenciales inválidas (401), logout invalida la sesión, acceso a ruta protegida sin sesión (401) en `tests/integration/auth-session.test.ts` (AC-19, AC-21, AC-25)
+- [X] T011 [P] [US1] Test de integración: `POST /api/auth/register` — éxito (201), email duplicado (409), campos inválidos (400) en `tests/integration/auth-register.test.ts` (`contracts/auth.md`, AC-22, AC-23, AC-24)
+- [X] T012 [P] [US1] Test de integración: login con credenciales inválidas (401), logout invalida la sesión, acceso a ruta protegida sin sesión (401) en `tests/integration/auth-session.test.ts` (AC-19, AC-21, AC-25)
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Utilidad de hash de contraseña con bcrypt en `src/lib/password.ts` (research.md #2)
-- [ ] T014 [US1] Esquema de validación de registro (email, password, nombre, apellido, celular) con zod en `src/lib/validations/auth.ts`
-- [ ] T015 [US1] Configurar Auth.js v5: Credentials provider (compara hash con `src/lib/password.ts`) y sesión JWT deslizante de 30 min (`session.maxAge`, callback `jwt`) en `src/lib/auth.ts` (research.md #1)
-- [ ] T016 [US1] Handler de Auth.js en `src/app/api/auth/[...nextauth]/route.ts`
-- [ ] T017 [US1] Endpoint `POST /api/auth/register` en `src/app/api/auth/register/route.ts` (201/400/409, usa T013 y T014, `contracts/auth.md`)
-- [ ] T018 [US1] Middleware de sesión que responde 401 en rutas protegidas (`/api/obra/**`, `/api/tipos-gasto`) en `src/middleware.ts`
-- [ ] T019 [US1] Página de registro en `src/app/(auth)/registro/page.tsx`
-- [ ] T020 [US1] Página de login (con `signIn` de Auth.js) y acción de logout (`signOut`) en `src/app/(auth)/login/page.tsx`
+- [X] T013 [US1] Utilidad de hash de contraseña con bcrypt en `src/lib/password.ts` (research.md #2)
+- [X] T014 [US1] Esquema de validación de registro (email, password, nombre, apellido, celular) con zod en `src/lib/validations/auth.ts`
+- [X] T015 [US1] Configurar Auth.js v5: Credentials provider (compara hash con `src/lib/password.ts`) y sesión JWT deslizante de 30 min (`session.maxAge`, callback `jwt`) en `src/lib/auth.ts` (research.md #1)
+- [X] T016 [US1] Handler de Auth.js en `src/app/api/auth/[...nextauth]/route.ts`
+- [X] T017 [US1] Endpoint `POST /api/auth/register` en `src/app/api/auth/register/route.ts` (201/400/409, usa T013 y T014, `contracts/auth.md`)
+- [X] T018 [US1] Middleware de sesión que responde 401 en rutas protegidas (`/api/obra/**`, `/api/tipos-gasto`) en `src/middleware.ts`
+- [X] T019 [US1] Página de registro en `src/app/(auth)/registro/page.tsx`
+- [X] T020 [US1] Página de login (con `signIn` de Auth.js) y acción de logout (`signOut`) en `src/app/(auth)/login/page.tsx`
 
 **Checkpoint**: User Story 1 completa y testeable de forma independiente
 
