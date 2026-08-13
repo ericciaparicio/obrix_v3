@@ -39,10 +39,10 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 **⚠️ CRITICAL**: Ninguna historia de usuario puede empezar hasta completar esta fase
 
-- [ ] T007 Definir el schema de Prisma (`Constructor`, `Obra`, `TipoGasto`, `Gasto` con sus relaciones y constraints `@unique`) en `prisma/schema.prisma` según `data-model.md`
-- [ ] T008 Ejecutar `pnpm dlx prisma db push` para aplicar el schema (sin archivos de migración, per AGENTS.md)
-- [ ] T009 [P] Crear `prisma/seed.ts` que carga los 5 `TipoGasto` precargados (Administrativos, Dirección de Obra, Materiales, Mano de Obra, Otros — FR-014) y configurar el script `prisma.seed` en `package.json`
-- [ ] T010 [P] Crear cliente Prisma singleton en `src/lib/prisma.ts`
+- [X] T007 Definir el schema de Prisma (`Constructor`, `Obra`, `TipoGasto`, `Gasto` con sus relaciones y constraints `@unique`) en `prisma/schema.prisma` según `data-model.md`
+- [X] T008 Ejecutar `pnpm dlx prisma db push` para aplicar el schema (sin archivos de migración, per AGENTS.md)
+- [X] T009 [P] Crear `prisma/seed.ts` que carga los 5 `TipoGasto` precargados (Administrativos, Dirección de Obra, Materiales, Mano de Obra, Otros — FR-014) y configurar el script `prisma.seed` en `package.json`
+- [X] T010 [P] Crear cliente Prisma singleton en `src/lib/prisma.ts`
 
 **Checkpoint**: Base de datos y cliente Prisma listos — las historias de usuario pueden comenzar
 

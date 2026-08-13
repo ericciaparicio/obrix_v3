@@ -1,0 +1,67 @@
+// Schema de Obrix — ver specs/001-gestion-presupuesto-obra/data-model.md
+// Sin archivos de migración (AGENTS.md): los cambios se aplican con `prisma db push`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Constructor {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  nombre       String
+  apellido     String
+  celular      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  obra Obra?
+}
+
+model Obra {
+  id                 String      @id @default(cuid())
+  constructorId      String      @unique
+  constructor        Constructor @relation(fields: [constructorId], references: [id], onDelete: Cascade)
+  nombre             String
+  pais               String
+  provincia          String
+  localidad          String
+  direccion          String
+  latitud            Decimal     @db.Decimal(9, 6)
+  longitud           Decimal     @db.Decimal(9, 6)
+  fechaInicio        DateTime
+  fechaFin           DateTime?
+  presupuestoInicial Decimal     @db.Decimal(12, 2)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  gastos Gasto[]
+}
+
+model TipoGasto {
+  id     String @id @default(cuid())
+  nombre String @unique
+
+  gastos Gasto[]
+}
+
+model Gasto {
+  id          String    @id @default(cuid())
+  obraId      String
+  obra        Obra      @relation(fields: [obraId], references: [id], onDelete: Cascade)
+  tipoGastoId String
+  tipoGasto   TipoGasto @relation(fields: [tipoGastoId], references: [id])
+  monto       Decimal   @db.Decimal(12, 2)
+  moneda      String    @default("ARS")
+  fecha       DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([obraId])
+  @@index([tipoGastoId])
+}
