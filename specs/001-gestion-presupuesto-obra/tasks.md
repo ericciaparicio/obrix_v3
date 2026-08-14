@@ -113,18 +113,18 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 ### Tests para la Historia de Usuario 3 (OBLIGATORIO) ⚠️
 
-- [ ] T030 [P] [US3] Test de integración: `GET /api/tipos-gasto` (5 tipos), `POST /api/obra/:obraId/gastos` (201/400/403/404), `GET .../reporte` con gastos incluyendo saldo negativo en `tests/integration/gastos.test.ts` (`contracts/gastos.md`, `contracts/reporte-historial.md`, AC-10 a AC-17, AC-30)
+- [X] T030 [P] [US3] Test de integración: `GET /api/tipos-gasto` (5 tipos), `POST /api/obra/:obraId/gastos` (201/400/403/404), `GET .../reporte` con gastos incluyendo saldo negativo en `tests/integration/gastos.test.ts` (`contracts/gastos.md`, `contracts/reporte-historial.md`, AC-10 a AC-17, AC-30)
 
 ### Implementation for User Story 3
 
-- [ ] T031 [P] [US3] Esquema de validación de Gasto (`monto` > 0, `tipoGastoId`, `fecha`, `moneda === "ARS"`) con zod en `src/lib/validations/gasto.ts`
-- [ ] T032 [US3] Servicio de Gasto: crear, listar, validar pertenencia a la obra en `src/lib/services/gastos.ts` (data-model.md)
-- [ ] T033 [US3] Completar servicio de Reporte Financiero: gastado, disponible (puede ser negativo), % consumido, desglose por tipo en `src/lib/services/reporte.ts` (FR-018, AC-16, AC-17)
-- [ ] T034 [US3] Endpoint `GET /api/tipos-gasto` en `src/app/api/tipos-gasto/route.ts`
-- [ ] T035 [US3] Endpoint `POST /api/obra/:obraId/gastos` en `src/app/api/obra/[obraId]/gastos/route.ts`
-- [ ] T036 [US3] Completar `GET /api/obra/:obraId/reporte` con gastos reales (usa T033) en `src/app/api/obra/[obraId]/reporte/route.ts`
-- [ ] T037 [US3] Página de carga de gastos en `src/app/obra/gastos/page.tsx`, incluyendo el guard de FR-013/AC-13: si el constructor autenticado no tiene obra creada (`GET /api/obra/me` → 404), redirigir a `src/app/obra/page.tsx` antes de mostrar el formulario de gasto
-- [ ] T038 [US3] Página de reporte financiero (presupuesto, gastado, disponible, %, desglose por tipo) en `src/app/obra/reporte/page.tsx`
+- [X] T031 [P] [US3] Esquema de validación de Gasto (`monto` > 0, `tipoGastoId`, `fecha`, `moneda === "ARS"`) con zod en `src/lib/validations/gasto.ts`
+- [X] T032 [US3] Servicio de Gasto: crear, listar, validar pertenencia a la obra en `src/lib/services/gastos.ts` (data-model.md)
+- [X] T033 [US3] Completar servicio de Reporte Financiero: gastado, disponible (puede ser negativo), % consumido, desglose por tipo en `src/lib/services/reporte.ts` (FR-018, AC-16, AC-17)
+- [X] T034 [US3] Endpoint `GET /api/tipos-gasto` en `src/app/api/tipos-gasto/route.ts`
+- [X] T035 [US3] Endpoint `POST /api/obra/:obraId/gastos` en `src/app/api/obra/[obraId]/gastos/route.ts`
+- [X] T036 [US3] Completar `GET /api/obra/:obraId/reporte` con gastos reales (usa T033) en `src/app/api/obra/[obraId]/reporte/route.ts`
+- [X] T037 [US3] Página de carga de gastos en `src/app/obra/gastos/page.tsx`, incluyendo el guard de FR-013/AC-13: si el constructor autenticado no tiene obra creada (`GET /api/obra/me` → 404), redirigir a `src/app/obra/page.tsx` antes de mostrar el formulario de gasto
+- [X] T038 [US3] Página de reporte financiero (presupuesto, gastado, disponible, %, desglose por tipo) en `src/app/obra/reporte/page.tsx`
 
 **Checkpoint**: MVP completo — User Stories 1+2+3 cubren el flujo central del PRD (crear cuenta → obra → presupuesto → gastos → reporte)
 
