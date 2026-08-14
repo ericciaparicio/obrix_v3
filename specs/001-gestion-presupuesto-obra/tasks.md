@@ -140,13 +140,13 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 ### Tests para la Historia de Usuario 4 (OBLIGATORIO) ⚠️
 
-- [ ] T039 [P] [US4] Test de integración: `PATCH /api/obra/:obraId` con valores válidos (200) e inválidos — campo obligatorio vacío, presupuesto cero/negativo/no numérico (400) en `tests/integration/obra-edicion.test.ts` (AC-06 a AC-09)
+- [X] T039 [P] [US4] Test de integración: `PATCH /api/obra/:obraId` con valores válidos (200) e inválidos — campo obligatorio vacío, presupuesto cero/negativo/no numérico (400) en `tests/integration/obra-edicion.test.ts` (AC-06 a AC-09)
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Extender el servicio de Obra (`src/lib/services/obra.ts`, T023) con edición de datos y de presupuesto, reutilizando las validaciones de T022
-- [ ] T041 [US4] Completar `PATCH /api/obra/:obraId` (`src/app/api/obra/[obraId]/route.ts`, T026) con las reglas de edición de T040
-- [ ] T042 [US4] Agregar formulario de edición de obra y presupuesto en `src/app/obra/page.tsx` (T029)
+- [X] T040 [US4] Extender el servicio de Obra (`src/lib/services/obra.ts`, T023) con edición de datos y de presupuesto, reutilizando las validaciones de T022 — ya implementado en Phase 4 (`editarObra`), verificado ahora por T039
+- [X] T041 [US4] Completar `PATCH /api/obra/:obraId` (`src/app/api/obra/[obraId]/route.ts`, T026) con las reglas de edición de T040 — ya implementado en Phase 4, verificado ahora por T039
+- [X] T042 [US4] Agregar formulario de edición de obra y presupuesto en `src/app/obra/page.tsx` (T029) — ya implementado en Phase 4 (detecta obra existente y hace PATCH)
 
 **Checkpoint**: Un constructor puede corregir los datos de su obra y presupuesto sin afectar US1–US3
 
