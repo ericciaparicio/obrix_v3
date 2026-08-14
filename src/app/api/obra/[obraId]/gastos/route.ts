@@ -1,10 +1,37 @@
 import { NextResponse } from "next/server";
 import { getCurrentConstructor } from "@/lib/auth";
 import { obtenerObraPorId } from "@/lib/services/obra";
-import { crearGasto } from "@/lib/services/gastos";
+import { crearGasto, listarGastosDeObra } from "@/lib/services/gastos";
 import { createGastoSchema } from "@/lib/validations/gasto";
 
 type RouteParams = { params: Promise<{ obraId: string }> };
+
+export async function GET(_request: Request, { params }: RouteParams) {
+  const constructor = await getCurrentConstructor();
+  if (!constructor) {
+    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+  }
+
+  const { obraId } = await params;
+  const obra = await obtenerObraPorId(obraId);
+  if (!obra) {
+    return NextResponse.json({ error: "Obra no encontrada" }, { status: 404 });
+  }
+  if (obra.constructorId !== constructor.id) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+  }
+
+  const gastos = await listarGastosDeObra(obraId);
+  return NextResponse.json(
+    gastos.map((g) => ({
+      id: g.id,
+      tipoGastoId: g.tipoGastoId,
+      tipoGastoNombre: g.tipoGasto.nombre,
+      monto: Number(g.monto),
+      fecha: g.fecha,
+    })),
+  );
+}
 
 export async function POST(request: Request, { params }: RouteParams) {
   const constructor = await getCurrentConstructor();

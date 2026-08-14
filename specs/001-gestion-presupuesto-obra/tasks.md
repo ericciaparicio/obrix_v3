@@ -162,13 +162,13 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 ### Tests para la Historia de Usuario 5 (OBLIGATORIO) ⚠️
 
-- [ ] T043 [P] [US5] Test de integración: `PATCH` y `DELETE /api/obra/:obraId/gastos/:gastoId` (200/204/400/403/404) en `tests/integration/gastos-edicion.test.ts` (AC-26 a AC-28)
+- [X] T043 [P] [US5] Test de integración: `PATCH` y `DELETE /api/obra/:obraId/gastos/:gastoId` (200/204/400/403/404) en `tests/integration/gastos-edicion.test.ts` (AC-26 a AC-28)
 
 ### Implementation for User Story 5
 
-- [ ] T044 [US5] Extender el servicio de Gasto (`src/lib/services/gastos.ts`, T032) con edición y eliminación permanente, reutilizando las validaciones de T031
-- [ ] T045 [US5] Endpoint `PATCH`/`DELETE /api/obra/:obraId/gastos/:gastoId` en `src/app/api/obra/[obraId]/gastos/[gastoId]/route.ts`
-- [ ] T046 [US5] Agregar acciones de editar/eliminar gasto en `src/app/obra/gastos/page.tsx` (T037)
+- [X] T044 [US5] Extender el servicio de Gasto (`src/lib/services/gastos.ts`, T032) con edición y eliminación permanente, reutilizando las validaciones de T031
+- [X] T045 [US5] Endpoint `PATCH`/`DELETE /api/obra/:obraId/gastos/:gastoId` en `src/app/api/obra/[obraId]/gastos/[gastoId]/route.ts`
+- [X] T046 [US5] Agregar acciones de editar/eliminar gasto en `src/app/obra/gastos/page.tsx` (T037) — también se agregó `GET /api/obra/:obraId/gastos` (listado simple sin filtros, no estaba en contracts/ original) para poblar esta pantalla
 
 **Checkpoint**: Un constructor puede corregir errores de carga en sus gastos sin afectar US1–US4
 

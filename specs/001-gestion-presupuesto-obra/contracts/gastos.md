@@ -15,6 +15,19 @@ Devuelve el catálogo precargado de tipos de gasto (FR-014).
 | 200 | `[{ "id": "string", "nombre": "Administrativos" }, ...]` (5 elementos, AC-30) |
 | 401 | No autenticado |
 
+## GET /api/obra/:obraId/gastos
+
+Lista simple (sin filtros, orden descendente por fecha) de los gastos de la obra. Pensada para poblar la pantalla de edición/eliminación de gastos (US5); el listado filtrable y ordenado cronológicamente para consulta está en `GET /api/obra/:obraId/historial` (ver `reporte-historial.md`, US6).
+
+**Responses**:
+
+| Status | Cuándo |
+|---|---|
+| 200 | `[{ "id": string, "tipoGastoId": string, "tipoGastoNombre": string, "monto": number, "fecha": ISO date }, ...]` |
+| 401 | No autenticado |
+| 403 | `obraId` pertenece a otro constructor |
+| 404 | `obraId` no existe |
+
 ## POST /api/obra/:obraId/gastos
 
 Registra un gasto contra la obra indicada.

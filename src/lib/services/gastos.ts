@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { CreateGastoInput } from "@/lib/validations/gasto";
+import type { CreateGastoInput, UpdateGastoInput } from "@/lib/validations/gasto";
 
 export async function crearGasto(obraId: string, data: CreateGastoInput) {
   return prisma.gasto.create({
@@ -15,4 +15,32 @@ export async function crearGasto(obraId: string, data: CreateGastoInput) {
 
 export async function obtenerGastoPorId(gastoId: string) {
   return prisma.gasto.findUnique({ where: { id: gastoId }, include: { obra: true } });
+}
+
+// Listado simple (sin filtros) para la pantalla de edición/eliminación de
+// gastos (US5). El historial filtrable completo es responsabilidad de US6.
+export async function listarGastosDeObra(obraId: string) {
+  return prisma.gasto.findMany({
+    where: { obraId },
+    include: { tipoGasto: true },
+    orderBy: { fecha: "desc" },
+  });
+}
+
+// FR-015 (US5): edita cualquier campo de un gasto ya registrado.
+export async function editarGasto(gastoId: string, data: UpdateGastoInput) {
+  return prisma.gasto.update({
+    where: { id: gastoId },
+    data: {
+      ...(data.tipoGastoId !== undefined && { tipoGastoId: data.tipoGastoId }),
+      ...(data.monto !== undefined && { monto: data.monto }),
+      ...(data.moneda !== undefined && { moneda: data.moneda }),
+      ...(data.fecha !== undefined && { fecha: data.fecha }),
+    },
+  });
+}
+
+// FR-016 (US5): eliminación permanente (hard delete).
+export async function eliminarGasto(gastoId: string) {
+  return prisma.gasto.delete({ where: { id: gastoId } });
 }
