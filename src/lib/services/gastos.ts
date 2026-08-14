@@ -44,3 +44,30 @@ export async function editarGasto(gastoId: string, data: UpdateGastoInput) {
 export async function eliminarGasto(gastoId: string) {
   return prisma.gasto.delete({ where: { id: gastoId } });
 }
+
+export type FiltrosHistorial = {
+  tipoGastoId?: string;
+  fechaDesde?: Date;
+  fechaHasta?: Date;
+};
+
+// FR-017 (US6): historial ordenado cronológicamente, filtrable por tipo y
+// por rango de fechas.
+export async function obtenerHistorial(obraId: string, filtros: FiltrosHistorial = {}) {
+  return prisma.gasto.findMany({
+    where: {
+      obraId,
+      ...(filtros.tipoGastoId && { tipoGastoId: filtros.tipoGastoId }),
+      ...(filtros.fechaDesde || filtros.fechaHasta
+        ? {
+            fecha: {
+              ...(filtros.fechaDesde && { gte: filtros.fechaDesde }),
+              ...(filtros.fechaHasta && { lte: filtros.fechaHasta }),
+            },
+          }
+        : {}),
+    },
+    include: { tipoGasto: true },
+    orderBy: { fecha: "asc" },
+  });
+}

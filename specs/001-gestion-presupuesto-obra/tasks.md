@@ -184,13 +184,13 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 ### Tests para la Historia de Usuario 6 (OBLIGATORIO) ⚠️
 
-- [ ] T047 [P] [US6] Test de integración: `GET /api/obra/:obraId/historial` sin filtros (orden cronológico), con filtro por tipo, con filtro por rango de fechas, rango inválido (400), y acceso de un constructor B a un `obraId` de A (403) en `tests/integration/historial.test.ts` (`contracts/reporte-historial.md`, AC-29, AC-20, FR-019, checklist CHK024)
+- [X] T047 [P] [US6] Test de integración: `GET /api/obra/:obraId/historial` sin filtros (orden cronológico), con filtro por tipo, con filtro por rango de fechas, rango inválido (400), y acceso de un constructor B a un `obraId` de A (403) en `tests/integration/historial.test.ts` (`contracts/reporte-historial.md`, AC-29, AC-20, FR-019, checklist CHK024)
 
 ### Implementation for User Story 6
 
-- [ ] T048 [US6] Servicio de historial con filtros por `tipoGastoId` y por rango de fechas en `src/lib/services/gastos.ts` (T032, FR-017)
-- [ ] T049 [US6] Endpoint `GET /api/obra/:obraId/historial` en `src/app/api/obra/[obraId]/historial/route.ts`
-- [ ] T050 [US6] Página de historial con filtros por tipo y fecha en `src/app/obra/historial/page.tsx`
+- [X] T048 [US6] Servicio de historial con filtros por `tipoGastoId` y por rango de fechas en `src/lib/services/gastos.ts` (T032, FR-017)
+- [X] T049 [US6] Endpoint `GET /api/obra/:obraId/historial` en `src/app/api/obra/[obraId]/historial/route.ts`
+- [X] T050 [US6] Página de historial con filtros por tipo y fecha en `src/app/obra/historial/page.tsx`
 
 **Checkpoint**: Las 6 historias de usuario del spec están completas e independientemente testeables
 
