@@ -27,7 +27,7 @@ Proyecto de construcción de un Constructor.
 | Campo | Tipo | Reglas |
 |---|---|---|
 | id | String | PK |
-| constructorId | String | FK → Constructor.id, `@unique` (garantiza 1 obra por constructor a nivel de DB) |
+| constructorId | String | FK → Constructor.id, `@unique` (garantiza 1 obra por constructor a nivel de DB). El campo de relación en Prisma se llama `propietario` (no `constructor`: ese nombre colisiona con `Object.prototype.constructor` y Prisma omite el filtro de relación generado). |
 | nombre | String | Obligatorio (FR-006) |
 | pais | String | Obligatorio |
 | provincia | String | Obligatorio |

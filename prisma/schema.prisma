@@ -26,7 +26,10 @@ model Constructor {
 model Obra {
   id                 String      @id @default(cuid())
   constructorId      String      @unique
-  constructor        Constructor @relation(fields: [constructorId], references: [id], onDelete: Cascade)
+  // Nombrado "propietario" (no "constructor"): ese nombre colisiona con
+  // Object.prototype.constructor y Prisma omite el filtro de relación
+  // generado para ObraWhereInput si se usa literalmente "constructor".
+  propietario        Constructor @relation(fields: [constructorId], references: [id], onDelete: Cascade)
   nombre             String
   pais               String
   provincia          String

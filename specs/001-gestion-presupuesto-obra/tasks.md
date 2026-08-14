@@ -86,18 +86,18 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 ### Tests para la Historia de Usuario 2 (OBLIGATORIO) ⚠️
 
-- [ ] T021 [P] [US2] Test de integración: `POST /api/obra` (201/400/409), `GET /api/obra/me` y `GET /api/obra/:obraId` (200/401/403/404), reporte sin gastos (AC-18) en `tests/integration/obra.test.ts` (`contracts/obra.md`, AC-01 a AC-05, AC-19, AC-20)
+- [X] T021 [P] [US2] Test de integración: `POST /api/obra` (201/400/409), `GET /api/obra/me` y `GET /api/obra/:obraId` (200/401/403/404), reporte sin gastos (AC-18) en `tests/integration/obra.test.ts` (`contracts/obra.md`, AC-01 a AC-05, AC-19, AC-20)
 
 ### Implementation for User Story 2
 
-- [ ] T022 [P] [US2] Esquema de validación de Obra (campos obligatorios, `presupuestoInicial` > 0) con zod en `src/lib/validations/obra.ts`
-- [ ] T023 [US2] Servicio de Obra: crear, obtener, verificar unicidad (una obra por constructor) y verificar propiedad en `src/lib/services/obra.ts` (data-model.md, AC-03)
-- [ ] T024 [US2] Servicio de cálculo del Reporte Financiero, caso sin gastos, en `src/lib/services/reporte.ts` (FR-018, AC-18)
-- [ ] T025 [US2] Endpoint `POST /api/obra` en `src/app/api/obra/route.ts`
-- [ ] T026 [US2] Endpoints `GET`/`PATCH /api/obra/:obraId` (incluye verificación de propiedad → 403) en `src/app/api/obra/[obraId]/route.ts`
-- [ ] T027 [US2] Endpoint `GET /api/obra/me` en `src/app/api/obra/me/route.ts`
-- [ ] T028 [US2] Endpoint `GET /api/obra/:obraId/reporte` (caso sin gastos) en `src/app/api/obra/[obraId]/reporte/route.ts`
-- [ ] T029 [US2] Página de alta de obra y presupuesto en `src/app/obra/page.tsx`
+- [X] T022 [P] [US2] Esquema de validación de Obra (campos obligatorios, `presupuestoInicial` > 0) con zod en `src/lib/validations/obra.ts`
+- [X] T023 [US2] Servicio de Obra: crear, obtener, verificar unicidad (una obra por constructor) y verificar propiedad en `src/lib/services/obra.ts` (data-model.md, AC-03)
+- [X] T024 [US2] Servicio de cálculo del Reporte Financiero, caso sin gastos, en `src/lib/services/reporte.ts` (FR-018, AC-18)
+- [X] T025 [US2] Endpoint `POST /api/obra` en `src/app/api/obra/route.ts`
+- [X] T026 [US2] Endpoints `GET`/`PATCH /api/obra/:obraId` (incluye verificación de propiedad → 403) en `src/app/api/obra/[obraId]/route.ts`
+- [X] T027 [US2] Endpoint `GET /api/obra/me` en `src/app/api/obra/me/route.ts`
+- [X] T028 [US2] Endpoint `GET /api/obra/:obraId/reporte` (caso sin gastos) en `src/app/api/obra/[obraId]/reporte/route.ts`
+- [X] T029 [US2] Página de alta de obra y presupuesto en `src/app/obra/page.tsx`
 
 **Checkpoint**: User Stories 1 y 2 funcionan juntas — un constructor puede crear cuenta, loguearse y registrar su obra con presupuesto
 

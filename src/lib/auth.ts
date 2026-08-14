@@ -87,3 +87,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
 });
+
+// Punto único que usan los Route Handlers para saber "quién soy" (FR-003).
+// Aislado en su propia función para poder mockearlo en tests de servicio/
+// endpoint sin tener que fabricar cookies de sesión reales en cada uno
+// (la mecánica de la cookie/JWT en sí ya está cubierta por T012 y T057).
+export async function getCurrentConstructor(): Promise<ConstructorSessionUser | null> {
+  const session = await auth();
+  if (!session?.user?.id || !session.user.email) {
+    return null;
+  }
+  return {
+    id: session.user.id,
+    email: session.user.email,
+    nombre: (session.user as unknown as ConstructorSessionUser).nombre,
+    apellido: (session.user as unknown as ConstructorSessionUser).apellido,
+  };
+}
