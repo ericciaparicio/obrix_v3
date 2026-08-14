@@ -200,14 +200,16 @@ Proyecto único Next.js 15 App Router (ver `plan.md` → Project Structure): `sr
 
 **Purpose**: Mejoras que afectan a varias historias de usuario
 
-- [ ] T051 [P] Tests unitarios del cálculo del reporte financiero (sin gastos, saldo negativo, redondeo de %) en `tests/unit/reporte.test.ts` (research.md #7)
-- [ ] T052 [P] Verificar FR-021/SC-007 (sin scroll horizontal, sin elementos superpuestos desde 320px) en todas las páginas de `src/app/obra/**` y `src/app/(auth)/**`
-- [ ] T053 Ejecutar manualmente los 6 escenarios de `quickstart.md` de punta a punta
-- [ ] T054 Revisar que no haya secretos hardcodeados en el diff y que `.env` esté en `.gitignore` (Principio III de la constitución)
-- [ ] T055 Confirmar que `pnpm test` pasa completo (gate de Flujo de Desarrollo de la constitución)
-- [ ] T056 [P] Benchmark liviano de `GET /api/obra/:obraId/reporte` con un volumen representativo de gastos (ej. 200+ registros seed) para verificar SC-002 (<3s p95) en `tests/unit/reporte-performance.test.ts`
-- [ ] T057 [P] Test de integración que simula la expiración de sesión tras 30 min de inactividad (mock del reloj o del `exp` del JWT) y confirma que la siguiente request a una ruta protegida devuelve 401 en `tests/integration/auth-session-expiry.test.ts` (FR-005)
-- [ ] T058 [P] Test unitario que confirma que `src/lib/password.ts` nunca devuelve ni persiste la contraseña en texto plano (el hash almacenado es distinto del input) en `tests/unit/password.test.ts` (FR-020/SC-008)
+- [X] T051 [P] Tests unitarios del cálculo del reporte financiero (sin gastos, saldo negativo, redondeo de %) en `tests/unit/reporte.test.ts` (research.md #7)
+- [X] T052 [P] Verificar FR-021/SC-007 (sin scroll horizontal, sin elementos superpuestos desde 320px) en todas las páginas de `src/app/obra/**` y `src/app/(auth)/**`
+- [X] T053 Ejecutar manualmente los 6 escenarios de `quickstart.md` de punta a punta
+- [X] T054 Revisar que no haya secretos hardcodeados en el diff y que `.env` esté en `.gitignore` (Principio III de la constitución)
+- [X] T055 Confirmar que `pnpm test` pasa completo (gate de Flujo de Desarrollo de la constitución)
+- [X] T056 [P] Benchmark liviano de `GET /api/obra/:obraId/reporte` con un volumen representativo de gastos (ej. 200+ registros seed) para verificar SC-002 (<3s p95) en `tests/unit/reporte-performance.test.ts`
+- [X] T057 [P] Test de integración que simula la expiración de sesión tras 30 min de inactividad (mock del reloj o del `exp` del JWT) y confirma que la siguiente request a una ruta protegida devuelve 401 en `tests/integration/auth-session-expiry.test.ts` (FR-005) — detectó y corrigió un bug real: sin header `x-forwarded-proto`, Auth.js asumía `https` y buscaba la cookie `__Secure-` equivocada
+- [X] T058 [P] Test unitario que confirma que `src/lib/password.ts` nunca devuelve ni persiste la contraseña en texto plano (el hash almacenado es distinto del input) en `tests/unit/password.test.ts` (FR-020/SC-008)
+
+**Extra (no listado originalmente)**: separación de `auth.config.ts` (edge-safe) y `auth.ts` (Node, con bcrypt/Prisma) — `pnpm build` mostraba warnings porque `middleware.ts` (Edge Runtime) arrastraba bcryptjs a través de `auth.ts`. `middleware.ts` ahora usa una instancia `NextAuth(authConfig)` propia y liviana, sin el Credentials provider.
 
 ---
 

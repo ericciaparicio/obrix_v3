@@ -37,7 +37,10 @@ export async function calcularReporte(obraId: string): Promise<ReporteFinanciero
   );
 
   const disponible = presupuestoTotal - gastado;
-  const porcentajeConsumido = presupuestoTotal > 0 ? (gastado / presupuestoTotal) * 100 : 0;
+  // Redondeado a 2 decimales para evitar artefactos de punto flotante
+  // (ej. 33.333333333333336) en la respuesta de la API.
+  const porcentajeConsumido =
+    presupuestoTotal > 0 ? Math.round((gastado / presupuestoTotal) * 10000) / 100 : 0;
 
   const desglosePorTipo: DesgloseTipo[] = await Promise.all(
     gastosPorTipo.map(async (g) => {

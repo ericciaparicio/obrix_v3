@@ -2,17 +2,9 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/password";
+import { authConfig, type ConstructorSessionUser } from "@/lib/auth.config";
 
-// FR-005/RNF-03: sesión JWT de 30 minutos que se renueva en cada request
-// autenticado exitoso (sliding session) — ver research.md #1.
-const SESSION_MAX_AGE_SECONDS = 30 * 60;
-
-export type ConstructorSessionUser = {
-  id: string;
-  email: string;
-  nombre: string;
-  apellido: string;
-};
+export type { ConstructorSessionUser };
 
 // Extraída como función standalone para poder testearla sin pasar por el
 // flujo completo de `signIn` de Auth.js (research.md #7).
@@ -42,10 +34,7 @@ export async function verifyCredentials(
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: {
-    strategy: "jwt",
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -62,30 +51,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      // Cada invocación (request autenticado) renueva `iat`/`exp` — es lo
-      // que produce el comportamiento de sesión deslizante de 30 min.
-      if (user) {
-        const sessionUser = user as unknown as ConstructorSessionUser;
-        token.constructorId = sessionUser.id;
-        token.nombre = sessionUser.nombre;
-        token.apellido = sessionUser.apellido;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.constructorId as string;
-        (session.user as unknown as ConstructorSessionUser).nombre = token.nombre as string;
-        (session.user as unknown as ConstructorSessionUser).apellido = token.apellido as string;
-      }
-      return session;
-    },
-  },
-  pages: {
-    signIn: "/login",
-  },
 });
 
 // Punto único que usan los Route Handlers para saber "quién soy" (FR-003).

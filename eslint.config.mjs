@@ -16,6 +16,17 @@ const eslintConfig = [
       "coverage/**",
     ],
   },
+  {
+    rules: {
+      // Convención estándar: parámetros con prefijo "_" son intencionalmente
+      // no usados (ej. `request` en Route Handlers que no lo necesitan pero
+      // deben mantener la firma esperada por Next.js/los tests).
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;
