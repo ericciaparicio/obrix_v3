@@ -8,10 +8,12 @@ export class ObraYaExisteError extends Error {
   }
 }
 
-// AC-03/FR-007: unicidad reforzada acá (mensaje claro) y por el constraint
-// @unique de constructorId en el schema (protege ante condiciones de carrera).
+// AC-03/FR-007: unicidad de "una obra ACTIVA por constructor" reforzada acá.
+// No hay constraint @unique en constructorId a nivel de schema porque un
+// constructor puede tener varias filas de Obra a lo largo del tiempo (una
+// activa + N dadas de baja); ver Obra.eliminadaEn.
 export async function crearObra(constructorId: string, data: CreateObraInput) {
-  const existing = await prisma.obra.findUnique({ where: { constructorId } });
+  const existing = await obtenerObraDeConstructor(constructorId);
   if (existing) {
     throw new ObraYaExisteError();
   }
@@ -33,12 +35,14 @@ export async function crearObra(constructorId: string, data: CreateObraInput) {
   });
 }
 
+// Una obra dada de baja se trata como inexistente para el resto de la app
+// (no aparece más, sus gastos dejan de ser accesibles) — ver eliminarObra.
 export async function obtenerObraPorId(obraId: string) {
-  return prisma.obra.findUnique({ where: { id: obraId } });
+  return prisma.obra.findFirst({ where: { id: obraId, eliminadaEn: null } });
 }
 
 export async function obtenerObraDeConstructor(constructorId: string) {
-  return prisma.obra.findUnique({ where: { constructorId } });
+  return prisma.obra.findFirst({ where: { constructorId, eliminadaEn: null } });
 }
 
 // FR-008/FR-010 (US4): edición de datos de obra y/o presupuesto.
@@ -59,5 +63,14 @@ export async function editarObra(obraId: string, data: UpdateObraInput) {
         presupuestoInicial: data.presupuestoInicial,
       }),
     },
+  });
+}
+
+// Baja lógica: no se borra la fila ni sus Gastos (quedan archivados), solo
+// se marca eliminadaEn. Libera el "cupo" de una obra activa por constructor.
+export async function eliminarObra(obraId: string) {
+  return prisma.obra.update({
+    where: { id: obraId },
+    data: { eliminadaEn: new Date() },
   });
 }

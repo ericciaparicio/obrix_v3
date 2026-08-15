@@ -80,6 +80,27 @@ export default function ObraPage() {
     router.push("/obra/reporte");
   }
 
+  async function handleEliminar() {
+    if (!obra) return;
+    const confirmado = window.confirm(
+      "¿Dar de baja esta obra? Vas a poder registrar una obra nueva, pero esta y sus gastos dejan de estar disponibles.",
+    );
+    if (!confirmado) return;
+
+    setError(null);
+    setLoading(true);
+    const res = await fetch(`/api/obra/${obra.id}`, { method: "DELETE" });
+    setLoading(false);
+
+    if (!res.ok && res.status !== 204) {
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "No se pudo dar de baja la obra");
+      return;
+    }
+
+    setObra(null);
+  }
+
   if (obra === undefined) {
     return <p>Cargando...</p>;
   }
@@ -87,7 +108,10 @@ export default function ObraPage() {
   return (
     <div className="card">
       <h1>{obra ? "Editar obra" : "Registrar mi obra"}</h1>
-      <form onSubmit={handleSubmit}>
+      {/* key: fuerza remount al pasar de "editando obra X" a "sin obra"
+          (ej. tras dar de baja) — si no, los <input> no controlados
+          (defaultValue) quedan con los valores viejos en pantalla. */}
+      <form key={obra?.id ?? "nueva"} onSubmit={handleSubmit}>
         <label>
           Nombre de la obra
           <input name="nombre" defaultValue={obra?.nombre} required />
@@ -157,6 +181,11 @@ export default function ObraPage() {
           {loading ? "Guardando..." : obra ? "Guardar cambios" : "Registrar obra"}
         </button>
       </form>
+      {obra && (
+        <button type="button" onClick={handleEliminar} disabled={loading} style={{ marginTop: "0.75rem" }}>
+          Dar de baja la obra
+        </button>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentConstructor } from "@/lib/auth";
 import { updateObraSchema } from "@/lib/validations/obra";
-import { obtenerObraPorId, editarObra } from "@/lib/services/obra";
+import { obtenerObraPorId, editarObra, eliminarObra } from "@/lib/services/obra";
 
 type RouteParams = { params: Promise<{ obraId: string }> };
 
@@ -54,4 +54,24 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
   const actualizada = await editarObra(obraId, parsed.data);
   return NextResponse.json(serialize(actualizada));
+}
+
+// Baja lógica (no elimina la fila ni sus gastos, ver eliminarObra).
+export async function DELETE(_request: Request, { params }: RouteParams) {
+  const constructor = await getCurrentConstructor();
+  if (!constructor) {
+    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+  }
+
+  const { obraId } = await params;
+  const obra = await obtenerObraPorId(obraId);
+  if (!obra) {
+    return NextResponse.json({ error: "Obra no encontrada" }, { status: 404 });
+  }
+  if (obra.constructorId !== constructor.id) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+  }
+
+  await eliminarObra(obraId);
+  return new NextResponse(null, { status: 204 });
 }

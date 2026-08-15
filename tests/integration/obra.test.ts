@@ -182,3 +182,113 @@ describe("GET /api/obra/:obraId y /api/obra/me", () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe("DELETE /api/obra/:obraId (baja lógica)", () => {
+  it("da de baja la obra propia (204) y deja de ser accesible", async () => {
+    const { POST } = await import("@/app/api/obra/route");
+    const { DELETE, GET: GET_BY_ID } = await import("@/app/api/obra/[obraId]/route");
+    const { GET: GET_ME } = await import("@/app/api/obra/me/route");
+    const constructor = await createConstructor("baja-propia");
+    mockLoggedInAs(constructor);
+
+    const createRes = await POST(obraRequest("http://localhost/api/obra", "POST", validObraPayload()));
+    const { id: obraId } = await createRes.json();
+
+    const deleteRes = await DELETE(obraRequest(`http://localhost/api/obra/${obraId}`, "DELETE"), {
+      params: Promise.resolve({ obraId }),
+    });
+    expect(deleteRes.status).toBe(204);
+
+    const getRes = await GET_BY_ID(obraRequest(`http://localhost/api/obra/${obraId}`, "GET"), {
+      params: Promise.resolve({ obraId }),
+    });
+    expect(getRes.status).toBe(404);
+
+    const meRes = await GET_ME(obraRequest("http://localhost/api/obra/me", "GET"));
+    expect(meRes.status).toBe(404);
+  });
+
+  it("permite registrar una obra nueva después de dar de baja la anterior", async () => {
+    const { POST } = await import("@/app/api/obra/route");
+    const { DELETE } = await import("@/app/api/obra/[obraId]/route");
+    const constructor = await createConstructor("baja-y-nueva");
+    mockLoggedInAs(constructor);
+
+    const createRes = await POST(obraRequest("http://localhost/api/obra", "POST", validObraPayload()));
+    const { id: obraId } = await createRes.json();
+    await DELETE(obraRequest(`http://localhost/api/obra/${obraId}`, "DELETE"), {
+      params: Promise.resolve({ obraId }),
+    });
+
+    const segundaRes = await POST(
+      obraRequest("http://localhost/api/obra", "POST", validObraPayload({ nombre: "Obra nueva" })),
+    );
+    expect(segundaRes.status).toBe(201);
+  });
+
+  it("conserva los gastos de la obra dada de baja (no los borra)", async () => {
+    const { POST } = await import("@/app/api/obra/route");
+    const { DELETE } = await import("@/app/api/obra/[obraId]/route");
+    const { POST: POST_GASTO } = await import("@/app/api/obra/[obraId]/gastos/route");
+    const constructor = await createConstructor("baja-conserva-gastos");
+    mockLoggedInAs(constructor);
+    const tipoGasto = await prisma.tipoGasto.findFirstOrThrow();
+
+    const createRes = await POST(obraRequest("http://localhost/api/obra", "POST", validObraPayload()));
+    const { id: obraId } = await createRes.json();
+    await POST_GASTO(
+      obraRequest(`http://localhost/api/obra/${obraId}/gastos`, "POST", {
+        tipoGastoId: tipoGasto.id,
+        monto: 5000,
+        moneda: "ARS",
+        fecha: "2026-02-01",
+      }),
+      { params: Promise.resolve({ obraId }) },
+    );
+
+    await DELETE(obraRequest(`http://localhost/api/obra/${obraId}`, "DELETE"), {
+      params: Promise.resolve({ obraId }),
+    });
+
+    const gastosRestantes = await prisma.gasto.count({ where: { obraId } });
+    expect(gastosRestantes).toBe(1);
+  });
+
+  it("responde 403 si otro constructor intenta dar de baja la obra — AC-20/FR-019", async () => {
+    const { POST } = await import("@/app/api/obra/route");
+    const { DELETE } = await import("@/app/api/obra/[obraId]/route");
+    const constructorA = await createConstructor("baja-dueno-a");
+    const constructorB = await createConstructor("baja-dueno-b");
+
+    mockLoggedInAs(constructorA);
+    const createRes = await POST(obraRequest("http://localhost/api/obra", "POST", validObraPayload()));
+    const { id: obraId } = await createRes.json();
+
+    mockLoggedInAs(constructorB);
+    const res = await DELETE(obraRequest(`http://localhost/api/obra/${obraId}`, "DELETE"), {
+      params: Promise.resolve({ obraId }),
+    });
+    expect(res.status).toBe(403);
+  });
+
+  it("responde 404 si la obra no existe o ya está dada de baja", async () => {
+    const { DELETE } = await import("@/app/api/obra/[obraId]/route");
+    const constructor = await createConstructor("baja-inexistente");
+    mockLoggedInAs(constructor);
+
+    const res = await DELETE(obraRequest("http://localhost/api/obra/no-existe", "DELETE"), {
+      params: Promise.resolve({ obraId: "no-existe" }),
+    });
+    expect(res.status).toBe(404);
+  });
+
+  it("responde 401 si no hay sesión", async () => {
+    const { DELETE } = await import("@/app/api/obra/[obraId]/route");
+    vi.mocked(authModule.getCurrentConstructor).mockResolvedValue(null);
+
+    const res = await DELETE(obraRequest("http://localhost/api/obra/cualquiera", "DELETE"), {
+      params: Promise.resolve({ obraId: "cualquiera" }),
+    });
+    expect(res.status).toBe(401);
+  });
+});

@@ -30,7 +30,7 @@ Crea la obra (y su presupuesto inicial) del constructor autenticado. No recibe `
 | 201 | Obra creada (AC-01, AC-04) |
 | 400 | Falta un campo obligatorio, o `presupuestoInicial` es cero/negativo/no numérico (AC-02, AC-05) |
 | 401 | No autenticado |
-| 409 | El constructor ya tiene una obra registrada (AC-03) |
+| 409 | El constructor ya tiene una obra **activa** registrada (AC-03). Si la única obra que tenía fue dada de baja (`DELETE /api/obra/:obraId`), puede volver a crear una. |
 
 ## GET /api/obra/:obraId
 
@@ -73,4 +73,17 @@ Edita datos de la obra ya registrada y/o el presupuesto inicial.
 | 400 | Edición deja vacío un campo obligatorio, o `presupuestoInicial` inválido (AC-07, AC-09) |
 | 401 | No autenticado |
 | 403 | `obraId` pertenece a otro constructor (AC-20, por consistencia con FR-019) |
-| 404 | `obraId` no existe |
+| 404 | `obraId` no existe (o ya fue dada de baja — ver `DELETE` abajo) |
+
+## DELETE /api/obra/:obraId
+
+**Agregado durante la implementación** (no estaba en el spec original), a pedido explícito del usuario: da de baja la obra de forma lógica (`eliminadaEn = now()`), no la borra físicamente. Sus Gastos tampoco se borran, pero dejan de ser accesibles junto con la obra. Libera el "cupo" de una obra por constructor: después de esto, `POST /api/obra` vuelve a aceptar una obra nueva para ese constructor.
+
+**Responses**:
+
+| Status | Cuándo |
+|---|---|
+| 204 | Obra dada de baja. A partir de acá, cualquier acceso a ese `obraId` (propio o ajeno) responde 404 como si no existiera. |
+| 401 | No autenticado |
+| 403 | `obraId` pertenece a otro constructor |
+| 404 | `obraId` no existe o ya estaba dada de baja |

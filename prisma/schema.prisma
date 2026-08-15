@@ -20,12 +20,12 @@ model Constructor {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  obra Obra?
+  obras Obra[]
 }
 
 model Obra {
   id                 String      @id @default(cuid())
-  constructorId      String      @unique
+  constructorId      String
   // Nombrado "propietario" (no "constructor"): ese nombre colisiona con
   // Object.prototype.constructor y Prisma omite el filtro de relación
   // generado para ObraWhereInput si se usa literalmente "constructor".
@@ -40,10 +40,17 @@ model Obra {
   fechaInicio        DateTime
   fechaFin           DateTime?
   presupuestoInicial Decimal     @db.Decimal(12, 2)
+  // Baja lógica: null = activa. La unicidad "una obra activa por
+  // constructor" ya no se puede reforzar con @unique en constructorId
+  // (dejaría de admitir más de una fila por constructor, incluso
+  // archivadas) — se valida en la capa de servicio (src/lib/services/obra.ts).
+  eliminadaEn        DateTime?
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
 
   gastos Gasto[]
+
+  @@index([constructorId])
 }
 
 model TipoGasto {

@@ -18,7 +18,7 @@ Persona autenticada, dueña de a lo sumo una Obra.
 | createdAt | DateTime | Auto |
 | updatedAt | DateTime | Auto |
 
-**Relaciones**: 1 Constructor → 0..1 Obra (FR-006/FR-007).
+**Relaciones**: 1 Constructor → 0..N Obra a lo largo del tiempo, pero **a lo sumo 1 activa** (`eliminadaEn IS NULL`) en un momento dado (FR-006/FR-007). Ver baja lógica más abajo.
 
 ## Obra
 
@@ -27,7 +27,7 @@ Proyecto de construcción de un Constructor.
 | Campo | Tipo | Reglas |
 |---|---|---|
 | id | String | PK |
-| constructorId | String | FK → Constructor.id, `@unique` (garantiza 1 obra por constructor a nivel de DB). El campo de relación en Prisma se llama `propietario` (no `constructor`: ese nombre colisiona con `Object.prototype.constructor` y Prisma omite el filtro de relación generado). |
+| constructorId | String | FK → Constructor.id. **Sin** `@unique`: un constructor puede tener varias filas de Obra a lo largo del tiempo (una activa + N dadas de baja) — la unicidad de "una obra ACTIVA por constructor" se valida en la capa de servicio (`crearObra`), no a nivel de schema. El campo de relación en Prisma se llama `propietario` (no `constructor`: ese nombre colisiona con `Object.prototype.constructor` y Prisma omite el filtro de relación generado). |
 | nombre | String | Obligatorio (FR-006) |
 | pais | String | Obligatorio |
 | provincia | String | Obligatorio |
@@ -38,6 +38,7 @@ Proyecto de construcción de un Constructor.
 | fechaInicio | DateTime | Obligatorio |
 | fechaFin | DateTime? | Opcional |
 | presupuestoInicial | Decimal(12,2) | Obligatorio, > 0 (FR-009); editable (FR-010) |
+| eliminadaEn | DateTime? | Baja lógica: `null` = activa. Ver sección de abajo. |
 | createdAt | DateTime | Auto |
 | updatedAt | DateTime | Auto |
 
@@ -46,7 +47,16 @@ Proyecto de construcción de un Constructor.
 **Reglas de validación** (de FR-006 a FR-010, AC-01 a AC-09):
 - Todos los campos obligatorios deben estar presentes y no vacíos para crear o editar.
 - `presupuestoInicial` debe ser numérico y estrictamente mayor a cero, tanto al crear como al editar.
-- No puede crearse una segunda Obra si `constructorId` ya tiene una (validado en servicio antes del insert, reforzado por `@unique`).
+- No puede crearse una segunda Obra ACTIVA si el constructor ya tiene una (validado en servicio antes del insert; `crearObra` filtra por `eliminadaEn: null`).
+
+### Baja lógica de la Obra
+
+Funcionalidad agregada durante la implementación (no estaba en el spec original), a pedido explícito del usuario.
+
+- `DELETE /api/obra/:obraId` marca `eliminadaEn = now()` en vez de borrar la fila (`eliminarObra` en `src/lib/services/obra.ts`). No hay hard delete de Obra expuesto por la API.
+- Todas las lecturas de Obra (`obtenerObraPorId`, `obtenerObraDeConstructor`) filtran `eliminadaEn: null` — una obra dada de baja se comporta como **404 / inexistente** para el resto del sistema, incluido su propio dueño; no hay una vista de "obras archivadas" en esta versión.
+- Los Gastos de una obra dada de baja **no se tocan ni se borran** (quedan en la base, asociados a esa `obraId`), simplemente dejan de ser alcanzables porque las rutas de gastos/reporte/historial primero resuelven la obra vía `obtenerObraPorId` (que ya excluye las dadas de baja) y devuelven 404.
+- Dar de baja la obra activa libera el "cupo" de una obra por constructor: `crearObra` puede volver a crear una obra nueva inmediatamente después.
 
 ## TipoGasto
 
