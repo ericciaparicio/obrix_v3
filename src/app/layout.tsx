@@ -4,6 +4,7 @@ import "./globals.css";
 import { auth } from "@/lib/auth";
 import LogoutButton from "@/components/LogoutButton";
 import NavBar from "@/components/NavBar";
+import Logo from "@/components/Logo";
 
 const wordmarkFont = Space_Grotesk({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default async function RootLayout({
         {session?.user && (
           <header className="app-header">
             <div className="app-header-top">
-              <strong className="header-wordmark">Obrix</strong>
+              <Logo size={28} compact />
               <span>Hola, {session.user.name ?? session.user.email}</span>
               <LogoutButton />
             </div>
