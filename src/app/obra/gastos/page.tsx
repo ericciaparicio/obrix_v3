@@ -199,7 +199,7 @@ export default function GastosPage() {
                     )}
                   </td>
                   <td style={{ textAlign: "right" }}>{formatoARS.format(gasto.monto)}</td>
-                  <td>
+                  <td style={{ paddingLeft: "0.75rem" }}>
                     <div className="table-actions">
                       <button
                         type="button"
