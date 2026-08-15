@@ -52,13 +52,18 @@ export default function GastosPage() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // React limpia `event.currentTarget` apenas termina la parte síncrona
+    // del handler, así que hay que guardar la referencia al form ANTES de
+    // cualquier `await` — usarla después (ej. para .reset()) lanza
+    // "Cannot read properties of null" si no se captura acá.
+    const form = event.currentTarget;
     setError(null);
     setSuccess(false);
 
     if (!obraId) return;
     setLoading(true);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const body = {
       tipoGastoId: formData.get("tipoGastoId"),
       monto: Number(formData.get("monto")),
@@ -85,7 +90,7 @@ export default function GastosPage() {
 
     setSuccess(true);
     setEditandoId(null);
-    event.currentTarget.reset();
+    form.reset();
     cargarGastos(obraId);
   }
 
