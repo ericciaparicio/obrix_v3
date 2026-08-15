@@ -43,6 +43,7 @@ export async function GET(request: Request, { params }: RouteParams) {
       tipoGastoId: g.tipoGastoId,
       tipoGastoNombre: g.tipoGasto.nombre,
       monto: Number(g.monto),
+      descripcion: g.descripcion,
     })),
   );
 }

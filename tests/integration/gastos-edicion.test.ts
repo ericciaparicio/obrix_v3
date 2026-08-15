@@ -97,6 +97,22 @@ describe("PATCH /api/obra/:obraId/gastos/:gastoId", () => {
     expect(json.monto).toBe(15000);
   });
 
+  it("edita la descripción de un gasto existente", async () => {
+    const { PATCH } = await import("@/app/api/obra/[obraId]/gastos/[gastoId]/route");
+    const { constructor, obra, gasto } = await createConstructorConObraYGasto("editar-descripcion");
+    mockLoggedInAs(constructor);
+
+    const res = await PATCH(
+      req(`http://localhost/api/obra/${obra.id}/gastos/${gasto.id}`, "PATCH", {
+        descripcion: "Corregido: era arena, no cemento",
+      }),
+      { params: Promise.resolve({ obraId: obra.id, gastoId: gasto.id }) },
+    );
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.descripcion).toBe("Corregido: era arena, no cemento");
+  });
+
   it("responde 403 si el gasto pertenece a la obra de otro constructor — AC-28", async () => {
     const { PATCH } = await import("@/app/api/obra/[obraId]/gastos/[gastoId]/route");
     const { obra, gasto } = await createConstructorConObraYGasto("gasto-dueno-a");

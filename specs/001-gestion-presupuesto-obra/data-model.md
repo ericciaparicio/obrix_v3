@@ -81,6 +81,7 @@ Erogación registrada contra una Obra.
 | monto | Decimal(12,2) | Obligatorio, > 0 (FR-012) |
 | moneda | String | Fijo `"ARS"` (FR-011); rechazar cualquier otro valor (FR-012) |
 | fecha | DateTime | Obligatorio (FR-012) |
+| descripcion | String? | Opcional, máx. 500 caracteres. Agregado durante la implementación (no estaba en el spec original), a pedido explícito del usuario. |
 | createdAt | DateTime | Auto |
 | updatedAt | DateTime | Auto |
 

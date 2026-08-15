@@ -29,6 +29,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       tipoGastoNombre: g.tipoGasto.nombre,
       monto: Number(g.monto),
       fecha: g.fecha,
+      descripcion: g.descripcion,
     })),
   );
 }

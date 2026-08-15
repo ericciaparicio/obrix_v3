@@ -307,6 +307,7 @@ Las tres se integran de forma independiente sobre el mismo MVP.
 
 ## Cambios posteriores a la implementación inicial
 
-Funcionalidades agregadas conversacionalmente después de completar las Phase 1–9, a pedido explícito del usuario, no derivadas del spec original. Se implementaron siguiendo el mismo Principio I (test primero, confirmar rojo, implementar) y quedaron reflejadas en `data-model.md` y `contracts/obra.md`.
+Funcionalidades agregadas conversacionalmente después de completar las Phase 1–9, a pedido explícito del usuario, no derivadas del spec original. Se implementaron siguiendo el mismo Principio I (test primero, confirmar rojo, implementar) y quedaron reflejadas en `data-model.md` y `contracts/`.
 
 - **Baja lógica de Obra** (`DELETE /api/obra/:obraId`): marca `eliminadaEn` en vez de borrar la fila; libera el cupo de "una obra por constructor" para poder registrar una obra nueva. Los Gastos de la obra dada de baja no se borran, solo dejan de ser accesibles. Tests en `tests/integration/obra.test.ts` (describe "DELETE /api/obra/:obraId (baja lógica)"). Requirió sacar el `@unique` de `Obra.constructorId` en el schema (ya no alcanza para expresar "una activa, N archivadas").
+- **Campo `descripcion` en Gasto**: opcional, máx. 500 caracteres, editable. Se muestra como subtítulo bajo el tipo de gasto en la tabla de "Gastos registrados" y en el historial (no como columna aparte, para no forzar scroll horizontal en 320px — FR-021/SC-007). Tests en `tests/integration/gastos.test.ts` y `gastos-edicion.test.ts`.

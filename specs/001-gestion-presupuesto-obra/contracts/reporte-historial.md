@@ -29,7 +29,7 @@ Devuelve el historial de gastos de la obra, ordenado cronológicamente, con filt
 
 | Status | Cuándo |
 |---|---|
-| 200 | `[{ "id": string, "fecha": ISO date, "tipoGastoId": string, "tipoGastoNombre": string, "monto": number }, ...]` — todos los gastos si no hay filtros (AC-29); acotado si se pasan filtros (User Story 6, escenarios 2 y 3) |
+| 200 | `[{ "id": string, "fecha": ISO date, "tipoGastoId": string, "tipoGastoNombre": string, "monto": number, "descripcion": string \| null }, ...]` — todos los gastos si no hay filtros (AC-29); acotado si se pasan filtros (User Story 6, escenarios 2 y 3) |
 | 400 | `fechaDesde` posterior a `fechaHasta` (checklist CHK024 — rango inválido) |
 | 401 | No autenticado |
 | 403 | `obraId` pertenece a otro constructor |

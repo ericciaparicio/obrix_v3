@@ -23,7 +23,7 @@ Lista simple (sin filtros, orden descendente por fecha) de los gastos de la obra
 
 | Status | Cuándo |
 |---|---|
-| 200 | `[{ "id": string, "tipoGastoId": string, "tipoGastoNombre": string, "monto": number, "fecha": ISO date }, ...]` |
+| 200 | `[{ "id": string, "tipoGastoId": string, "tipoGastoNombre": string, "monto": number, "fecha": ISO date, "descripcion": string \| null }, ...]` |
 | 401 | No autenticado |
 | 403 | `obraId` pertenece a otro constructor |
 | 404 | `obraId` no existe |
@@ -39,9 +39,12 @@ Registra un gasto contra la obra indicada.
   "tipoGastoId": "string",
   "monto": "number",
   "moneda": "ARS",
-  "fecha": "ISO date"
+  "fecha": "ISO date",
+  "descripcion": "string (opcional, máx. 500 caracteres)"
 }
 ```
+
+`descripcion` no estaba en el spec original — se agregó durante la implementación a pedido explícito del usuario.
 
 **Responses**:
 

@@ -35,11 +35,16 @@ label {
   font-size: 0.9rem;
 }
 
-input, select, button {
+input, select, button, textarea {
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+textarea {
+  font-family: inherit;
+  resize: vertical;
 }
 
 table {

@@ -10,6 +10,7 @@ type Gasto = {
   tipoGastoNombre: string;
   monto: number;
   fecha: string;
+  descripcion: string | null;
 };
 
 const formatoARS = new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" });
@@ -137,7 +138,15 @@ export default function HistorialPage() {
               {historial.map((gasto) => (
                 <tr key={gasto.id}>
                   <td>{gasto.fecha.slice(0, 10)}</td>
-                  <td>{gasto.tipoGastoNombre}</td>
+                  <td>
+                    {gasto.tipoGastoNombre}
+                    {gasto.descripcion && (
+                      <>
+                        <br />
+                        <small style={{ color: "#666" }}>{gasto.descripcion}</small>
+                      </>
+                    )}
+                  </td>
                   <td style={{ textAlign: "right" }}>{formatoARS.format(gasto.monto)}</td>
                 </tr>
               ))}

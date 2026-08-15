@@ -113,6 +113,47 @@ describe("POST /api/obra/:obraId/gastos", () => {
     expect(res.status).toBe(201);
   });
 
+  it("permite registrar un gasto sin descripción (opcional)", async () => {
+    const { POST } = await import("@/app/api/obra/[obraId]/gastos/route");
+    const { constructor, obra } = await createConstructorConObra("gasto-sin-descripcion");
+    mockLoggedInAs(constructor);
+    const tipoGasto = await prisma.tipoGasto.findFirstOrThrow();
+
+    const res = await POST(
+      req(`http://localhost/api/obra/${obra.id}/gastos`, "POST", {
+        tipoGastoId: tipoGasto.id,
+        monto: 5000,
+        moneda: "ARS",
+        fecha: "2026-02-01",
+      }),
+      { params: Promise.resolve({ obraId: obra.id }) },
+    );
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.descripcion).toBeNull();
+  });
+
+  it("guarda y devuelve la descripción del gasto cuando se envía", async () => {
+    const { POST } = await import("@/app/api/obra/[obraId]/gastos/route");
+    const { constructor, obra } = await createConstructorConObra("gasto-con-descripcion");
+    mockLoggedInAs(constructor);
+    const tipoGasto = await prisma.tipoGasto.findFirstOrThrow();
+
+    const res = await POST(
+      req(`http://localhost/api/obra/${obra.id}/gastos`, "POST", {
+        tipoGastoId: tipoGasto.id,
+        monto: 5000,
+        moneda: "ARS",
+        fecha: "2026-02-01",
+        descripcion: "Bolsas de cemento para la losa",
+      }),
+      { params: Promise.resolve({ obraId: obra.id }) },
+    );
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.descripcion).toBe("Bolsas de cemento para la losa");
+  });
+
   it("rechaza monto cero o negativo (400) — AC-11", async () => {
     const { POST } = await import("@/app/api/obra/[obraId]/gastos/route");
     const { constructor, obra } = await createConstructorConObra("gasto-monto-invalido");

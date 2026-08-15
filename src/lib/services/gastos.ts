@@ -9,6 +9,7 @@ export async function crearGasto(obraId: string, data: CreateGastoInput) {
       monto: data.monto,
       moneda: data.moneda,
       fecha: data.fecha,
+      descripcion: data.descripcion || null,
     },
   });
 }
@@ -36,6 +37,7 @@ export async function editarGasto(gastoId: string, data: UpdateGastoInput) {
       ...(data.monto !== undefined && { monto: data.monto }),
       ...(data.moneda !== undefined && { moneda: data.moneda }),
       ...(data.fecha !== undefined && { fecha: data.fecha }),
+      ...(data.descripcion !== undefined && { descripcion: data.descripcion || null }),
     },
   });
 }

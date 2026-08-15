@@ -10,6 +10,7 @@ type Gasto = {
   tipoGastoNombre: string;
   monto: number;
   fecha: string;
+  descripcion: string | null;
 };
 
 const formatoARS = new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" });
@@ -64,11 +65,13 @@ export default function GastosPage() {
     setLoading(true);
 
     const formData = new FormData(form);
+    const descripcion = formData.get("descripcion");
     const body = {
       tipoGastoId: formData.get("tipoGastoId"),
       monto: Number(formData.get("monto")),
       moneda: "ARS",
       fecha: formData.get("fecha"),
+      descripcion: descripcion ? String(descripcion) : undefined,
     };
 
     const url = editandoId
@@ -102,6 +105,7 @@ export default function GastosPage() {
     (form.elements.namedItem("tipoGastoId") as HTMLSelectElement).value = gasto.tipoGastoId;
     (form.elements.namedItem("monto") as HTMLInputElement).value = String(gasto.monto);
     (form.elements.namedItem("fecha") as HTMLInputElement).value = gasto.fecha.slice(0, 10);
+    (form.elements.namedItem("descripcion") as HTMLTextAreaElement).value = gasto.descripcion ?? "";
   }
 
   async function eliminarGasto(gastoId: string) {
@@ -142,6 +146,10 @@ export default function GastosPage() {
             Fecha
             <input name="fecha" type="date" required />
           </label>
+          <label>
+            Descripción (opcional)
+            <textarea name="descripcion" rows={2} maxLength={500} />
+          </label>
           {error && <p className="error">{error}</p>}
           {success && <p>Gasto guardado correctamente.</p>}
           <button type="submit" disabled={loading}>
@@ -181,7 +189,15 @@ export default function GastosPage() {
               {gastos.map((gasto) => (
                 <tr key={gasto.id}>
                   <td>{gasto.fecha.slice(0, 10)}</td>
-                  <td>{gasto.tipoGastoNombre}</td>
+                  <td>
+                    {gasto.tipoGastoNombre}
+                    {gasto.descripcion && (
+                      <>
+                        <br />
+                        <small style={{ color: "#666" }}>{gasto.descripcion}</small>
+                      </>
+                    )}
+                  </td>
                   <td style={{ textAlign: "right" }}>{formatoARS.format(gasto.monto)}</td>
                   <td>
                     <button
