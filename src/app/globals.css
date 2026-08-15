@@ -150,6 +150,8 @@ table {
   display: flex;
   gap: 0.35rem;
   flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
 }
 
 .btn-sm {
