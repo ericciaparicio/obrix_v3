@@ -41,7 +41,6 @@ export default function LoginPage() {
   return (
     <div className="card">
       <Logo />
-      <h1>Iniciar sesión</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Email
