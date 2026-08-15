@@ -200,18 +200,21 @@ export default function GastosPage() {
                   </td>
                   <td style={{ textAlign: "right" }}>{formatoARS.format(gasto.monto)}</td>
                   <td>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const form = document.getElementById("gasto-form") as HTMLFormElement;
-                        empezarEdicion(gasto, form);
-                      }}
-                    >
-                      Editar
-                    </button>
-                    <button type="button" onClick={() => eliminarGasto(gasto.id)}>
-                      Eliminar
-                    </button>
+                    <div className="table-actions">
+                      <button
+                        type="button"
+                        className="btn-sm"
+                        onClick={() => {
+                          const form = document.getElementById("gasto-form") as HTMLFormElement;
+                          empezarEdicion(gasto, form);
+                        }}
+                      >
+                        Editar
+                      </button>
+                      <button type="button" className="btn-sm" onClick={() => eliminarGasto(gasto.id)}>
+                        Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

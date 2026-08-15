@@ -145,3 +145,15 @@ table {
   font-size: 1.25rem;
   color: #fff;
 }
+
+.table-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  width: auto;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+}
