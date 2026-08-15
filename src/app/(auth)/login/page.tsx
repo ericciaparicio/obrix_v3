@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,9 +29,13 @@ export default function LoginPage() {
       return;
     }
 
-    // El reporte financiero redirige solo a /obra si el constructor
-    // todavía no tiene una obra creada (primer login tras registrarse).
-    router.push("/obra/reporte");
+    // Navegación completa (no router.push): signIn() cambia la cookie de
+    // sesión por fuera del router de Next.js, y una navegación client-side
+    // puede servir el layout raíz (header/menú) desde el router cache de
+    // ANTES del login — sin sesión — hasta el próximo hard refresh. El
+    // reporte financiero redirige solo a /obra si el constructor todavía
+    // no tiene una obra creada (primer login tras registrarse).
+    window.location.href = "/obra/reporte";
   }
 
   return (

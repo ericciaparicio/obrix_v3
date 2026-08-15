@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 import LogoutButton from "@/components/LogoutButton";
 import NavBar from "@/components/NavBar";
+
+const wordmarkFont = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-wordmark",
+});
 
 export const metadata: Metadata = {
   title: "Obrix",
@@ -15,12 +22,12 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="es">
+    <html lang="es" className={wordmarkFont.variable}>
       <body>
         {session?.user && (
           <header className="app-header">
             <div className="app-header-top">
-              <strong>Obrix</strong>
+              <strong className="header-wordmark">Obrix</strong>
               <span>Hola, {session.user.name ?? session.user.email}</span>
               <LogoutButton />
             </div>
