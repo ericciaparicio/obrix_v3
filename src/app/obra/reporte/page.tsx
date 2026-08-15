@@ -47,8 +47,8 @@ export default function ReportePage() {
 
   return (
     <div>
-      <h1>Reporte financiero</h1>
       <div className="card">
+        <h1>Reporte financiero</h1>
         <p>Presupuesto total: {formatoARS.format(reporte.presupuestoTotal)}</p>
         <p>Gastado: {formatoARS.format(reporte.gastado)}</p>
         <p>
