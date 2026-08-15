@@ -30,7 +30,9 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/obra");
+    // El reporte financiero redirige solo a /obra si el constructor
+    // todavía no tiene una obra creada (primer login tras registrarse).
+    router.push("/obra/reporte");
   }
 
   return (
