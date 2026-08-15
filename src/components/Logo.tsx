@@ -3,7 +3,7 @@ type LogoProps = {
   showWordmark?: boolean;
 };
 
-export default function Logo({ size = 56, showWordmark = true }: LogoProps) {
+export default function Logo({ size = 44, showWordmark = true }: LogoProps) {
   return (
     <div className="logo">
       <svg
@@ -13,7 +13,7 @@ export default function Logo({ size = 56, showWordmark = true }: LogoProps) {
         role="img"
         aria-label="Obrix"
       >
-        <rect width="56" height="56" rx="14" fill="#1a1a2e" />
+        <rect width="56" height="56" rx="16" fill="#1a1a2e" />
         {/* Techo */}
         <path d="M28 12 L44 24 L40 24 L40 26 L16 26 L16 24 L12 24 Z" fill="#fff" />
         {/* Cuerpo de la casa */}
