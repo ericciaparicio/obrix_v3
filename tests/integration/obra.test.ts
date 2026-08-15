@@ -56,7 +56,11 @@ function mockLoggedInAs(constructor: { id: string; email: string }) {
 }
 
 beforeEach(async () => {
-  await prisma.gasto.deleteMany({});
+  // Scopeado: deleteMany({}) sin filtro borraría todos los gastos de la
+  // base, no solo los de test.
+  await prisma.gasto.deleteMany({
+    where: { obra: { propietario: { email: { endsWith: TEST_EMAIL_DOMAIN } } } },
+  });
   await prisma.obra.deleteMany({
     where: { propietario: { email: { endsWith: TEST_EMAIL_DOMAIN } } },
   });
