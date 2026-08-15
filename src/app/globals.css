@@ -58,3 +58,57 @@ table {
   padding: 1rem;
   margin-bottom: 1rem;
 }
+
+.app-header {
+  background: #1a1a2e;
+  color: #fff;
+  width: 100%;
+}
+
+.app-header-top {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.app-header-top button {
+  width: auto;
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+}
+
+.navbar {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  padding: 0 0.5rem 0.5rem;
+}
+
+.navbar-link {
+  color: #cfd2ff;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.navbar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-link-active {
+  background: #fff;
+  color: #1a1a2e;
+  font-weight: 600;
+}

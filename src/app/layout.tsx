@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 import LogoutButton from "@/components/LogoutButton";
+import NavBar from "@/components/NavBar";
 
 export const metadata: Metadata = {
   title: "Obrix",
@@ -17,38 +17,17 @@ export default async function RootLayout({
   return (
     <html lang="es">
       <body>
-        <main>
-          {session?.user && (
-            <header style={{ marginBottom: "1rem" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "0.5rem",
-                }}
-              >
-                <span>Hola, {session.user.name ?? session.user.email}</span>
-                <LogoutButton />
-              </div>
-              <nav
-                style={{
-                  display: "flex",
-                  gap: "1rem",
-                  flexWrap: "wrap",
-                  marginTop: "0.5rem",
-                }}
-              >
-                <Link href="/obra">Mi obra</Link>
-                <Link href="/obra/gastos">Gastos</Link>
-                <Link href="/obra/reporte">Reporte</Link>
-                <Link href="/obra/historial">Historial</Link>
-              </nav>
-            </header>
-          )}
-          {children}
-        </main>
+        {session?.user && (
+          <header className="app-header">
+            <div className="app-header-top">
+              <strong>Obrix</strong>
+              <span>Hola, {session.user.name ?? session.user.email}</span>
+              <LogoutButton />
+            </div>
+            <NavBar />
+          </header>
+        )}
+        <main>{children}</main>
       </body>
     </html>
   );
