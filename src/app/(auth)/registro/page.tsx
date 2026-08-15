@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function RegistroPage() {
 
   return (
     <div className="card">
+      <Logo />
       <h1>Crear cuenta</h1>
       <form onSubmit={handleSubmit}>
         <label>
