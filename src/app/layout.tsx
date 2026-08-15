@@ -29,7 +29,6 @@ export default async function RootLayout({
           <header className="app-header">
             <div className="app-header-top">
               <Logo size={28} compact />
-              <span>Hola, {session.user.name ?? session.user.email}</span>
               <LogoutButton />
             </div>
             <NavBar />
